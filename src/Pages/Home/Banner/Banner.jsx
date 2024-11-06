@@ -27,7 +27,7 @@ const Banner = () => {
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black bg-opacity-50 font-jost">
         {/* for text only */}
         <div className="relative  z-20 text-center max-w-4xl px-4">
-          <h2 className="text-lg md:text-3xl text-blue-200 font-bold md:p-4 font-jost">
+          <h2 className="text-lg md:text-3xl lg:text-5xl text-blue-200 font-bold md:p-4 font-jost">
             Master Programming with Mates
           </h2>
           <p className="text-[15px] md:text-xl mb-6">
