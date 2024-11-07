@@ -3,3 +3,21 @@
 body{
   font-family: 'Jost', sans-serif; /* Default font */
 }
+@keyframes flowerBlow {
+  0% {
+    transform: translateX(-100%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) scale(0.5);
+    opacity: 0;
+  }
+}
+
+.flower-animation {
+  animation: flowerBlow 6s infinite ease-in-out;
+}

@@ -10,17 +10,17 @@ const Navbar = () => {
           <h2 className="text-base md:text-3xl font-bold text-yellow-200 text-start">AlgoArena</h2>
 
           {/* desktop view */}
-          <ul className="hidden md:flex gap-8 md:gap-4">
+          <ul className="hidden md:flex gap-8 md:gap-4 font-bold font-jost">
             <li>
               <NavLink to="/">Home</NavLink>
             </li>
             <li>
               <NavLink to={"/login"}>Login</NavLink>
             </li>
-            <li className="lg:mr-[150px]">
+            <li className="lg:pr-[200px]">
               <NavLink to={"/all_contest"}>All Contest</NavLink>
             </li>
-            <li className="md:ml-32 lg:ml-32">
+            <li className="md:pl-32 lg:pl-32">
               <NavLink to={"/nothing"}>Profile</NavLink>
             </li>
           </ul>

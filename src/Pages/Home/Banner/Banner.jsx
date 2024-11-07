@@ -18,7 +18,7 @@ const Banner = () => {
         className="h-full overflow-hidden"
       >
         {images.map((img, idx) => (
-          <div key={idx} data-src={img} className="bg-cover bg-center h-full" />
+          <div key={idx} data-src={img} className="bg-cover bg-fixed bg-center h-full" />
         ))}
       </AutoplaySlider>
 
