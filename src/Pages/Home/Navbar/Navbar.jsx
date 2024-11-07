@@ -36,7 +36,7 @@ const Navbar = () => {
         {/* drop downmenu for mobile */}
         {open && (
           <div className="md:hidden">
-            <ul className="flex flex-col bg-gray-700 p-2 mt-2 rounded">
+            <ul className="flex font-jost  flex-col bg-gray-700 p-2 mt-2 rounded">
               <li className="py-1">
                 <NavLink to="/">Home</NavLink>
               </li>
