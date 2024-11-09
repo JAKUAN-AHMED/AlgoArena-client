@@ -59,7 +59,7 @@ const PopularContest = () => {
           placeholder="Search contest by tag..."
           className="input input-bordered w-full max-w-md mr-4"
         />
-        <Link to={"/all-contest"}>
+        <Link to={"/allContest"}>
           <button className="w-[130px] h-[50px] border rounded shadow-md bg-blue-600 text-white">
             Show All Contest
           </button>

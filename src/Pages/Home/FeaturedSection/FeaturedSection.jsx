@@ -1,17 +1,6 @@
 import img1 from "../../../assets/c.jpg";
 import img2 from "../../../assets/s4.jpg";
 import img3 from "../../../assets/s2.jpg";
-import AwesomeSlider from "react-awesome-slider";
-import "react-awesome-slider/dist/styles.css";
-
-const slider = (
-  <AwesomeSlider>
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
-  </AwesomeSlider>
-);
 const FeaturedSection = () => {
   // Sample data for featured contests
   const featuredContests = [
