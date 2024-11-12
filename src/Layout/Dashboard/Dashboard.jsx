@@ -13,9 +13,10 @@ import {
 import { ImSpoonKnife } from "react-icons/im";
 import { IoIosList } from "react-icons/io";
 import { NavLink, Outlet } from "react-router-dom";
+import useRole from "../../Hooks/useRole";
 
 const Dashboard = () => {
-  const isAdmin = true;
+  const [isAdmin,isCreator]=useRole();
   return (
     <div className="flex font-cinzel">
       {/* dashboard sidebar */}
@@ -25,7 +26,7 @@ const Dashboard = () => {
             <>
               <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
                 <NavLink
-                  to={"/dashboard/ManageUser"}
+                  to={"/dashboard/manageUser"}
                   className="flex items-center gap-1 text-[8px] lg:text-xl"
                 >
                   <span>
@@ -45,53 +46,60 @@ const Dashboard = () => {
             </>
           ) : (
             <>
-              <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
-                <NavLink
-                  to="/dashboard/userHome"
-                  className="flex items-center gap-1 text-[8px] lg:text-xl"
-                >
-                  <FaHome></FaHome>
-                  User Home
-                </NavLink>
-              </li>
-              <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
-                <NavLink
-                  to={"/dashboard/reservatioin"}
-                  className="flex items-center gap-1 text-[8px] lg:text-xl"
-                >
-                  <span>
-                    <FaCalendarAlt></FaCalendarAlt>{" "}
-                  </span>{" "}
-                  Reservation
-                </NavLink>
-              </li>
-              <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
-                <NavLink
-                  to={"/dashboard/cart"}
-                  className="flex items-center gap-1"
-                >
-                  <FaShoppingCart /> My Cart
-                </NavLink>
-              </li>
-              <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
-                <NavLink
-                  to={"/dashboard/review"}
-                  className="flex items-center gap-1"
-                >
-                  <FaStar></FaStar> Add a Review
-                </NavLink>
-              </li>
-              <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
-                <NavLink
-                  to={"/dashboard/bookins"}
-                  className="flex items-center gap-1"
-                >
-                  <span>
-                    <FaCalendarCheck></FaCalendarCheck>
-                  </span>
-                  My Bookings
-                </NavLink>
-              </li>
+              {isCreator ? (
+                <>
+                  <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
+                    <NavLink
+                      to="/dashboard/addContest"
+                      className="flex items-center gap-1 text-[8px] lg:text-xl"
+                    >
+                      <FaHome></FaHome>
+                      Add Contest
+                    </NavLink>
+                  </li>
+                  <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
+                    <NavLink
+                      to={"/dashboard/myCreatedContest"}
+                      className="flex items-center gap-1 text-[8px] lg:text-xl"
+                    >
+                      <span>
+                        <FaCalendarAlt></FaCalendarAlt>{" "}
+                      </span>{" "}
+                      My Created Contests
+                    </NavLink>
+                  </li>
+                  <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
+                    <NavLink
+                      to={"/dashboard/submittedContests"}
+                      className="flex items-center gap-1"
+                    >
+                      <FaShoppingCart /> Contest Submitted Page
+                    </NavLink>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
+                    <NavLink
+                      to={"/dashboard/participated"}
+                      className="flex items-center gap-1"
+                    >
+                      <FaStar></FaStar> My Participated Contest
+                    </NavLink>
+                  </li>
+                  <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
+                    <NavLink
+                      to={"/dashboard/winnersPage"}
+                      className="flex items-center gap-1"
+                    >
+                      <span>
+                        <FaCalendarCheck></FaCalendarCheck>
+                      </span>
+                      My Winning Contest Page:
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </>
           )}
           {/* divider here shared Navlinks */}

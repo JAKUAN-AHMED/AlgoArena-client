@@ -13,7 +13,7 @@ import useAxiosPublic from "../Hooks/useAxiosPublic";
 import app from "../Firebase/firebase.config";
 export const AuthContext = createContext(null);
 const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [User, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const axiosPublic=useAxiosPublic();
   const auth=getAuth(app)
@@ -66,7 +66,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const AuthInfo = {
-    user,
+    User,
     loading,
     CreateUser,
     LogIn,

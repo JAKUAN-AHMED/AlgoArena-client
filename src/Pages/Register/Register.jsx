@@ -1,5 +1,3 @@
-// Register.jsx
-
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth.jsx";
@@ -17,91 +15,71 @@ const Register = () => {
     formState: { errors },
     reset,
   } = useForm();
-  const { CreateUser, profile,google } = useAuth();
-  const axiosPublic=useAxiosPublic();
-  const postDataToTheServer=(userInfo)=>{
-    axiosPublic.post('/users',userInfo)
-    .then(res=>{
-      if(res.data.insertedId){
-        Swal.fire({
-          title:'successfuly inserted user to the db',
-          icon:'success',
-        })
-      }
-    })
-    .catch(error=>console.log(error.message));
-  }
+  const { CreateUser, profile, google } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
-  //google login
-  const handleGoogleLogin=()=>{
-    google()
-    .then(res=>{
-      const user = res.user;
-      if (user && !user.photoURL) {
-        const name=user.displayName;
-        const email=user.email;
-        const photo=user.photoURL;
-        const userInfo={
-          name:name,
-          email:email,
-          photoURL:photo,
-
+  const postDataToTheServer = (dataInfo) => {
+    axiosPublic
+      .post("/users", dataInfo)
+      .then((res) => {
+        if (res.data.insertedId) {
+          Swal.fire({
+            title: "Successfully inserted data to the DB",
+            icon: "success",
+          });
         }
-        postDataToTheServer(userInfo);
-        profile(user,name,photo)
-        .then(()=>{
-         
-         Swal.fire({
-           title: "successfully Register",
-           icon: "success",
-         });
-        })
-        navigate("/");
-      }
-      
-    })
-    .catch(error=>console.log(error.message))
-  }
-  const onSubmit = (user) => {
-    console.log("data from registration page", user);
-    reset();
-    //sign in
-    const email = user.email;
-    const password = user.password;
-    const name = user.name;
-    const photo=user.photoURL;
-    const userInfo={
-      name:name,
-      email:email,
-      photoURL:photo,
-    }
-    postDataToTheServer(userInfo);
-    CreateUser(email, password)
-      .then((result) => {
-        // alert("sucessfully registered");
-        
-        const user = result.user;
-        profile(user, name,photo)
-          .then(() => {
-            const userInfo = {
-              name: name,
-              email: email,
-              photoURL:photo
-            };
-             Swal.fire({
-               position: "top",
-               icon: "success",
-               title: "Register Successfully",
-               showConfirmButton: true,
-               timer: 1500,
-             });
-          })
-          .catch((error) => console.log(error.message));
-       navigate("/login");   
       })
       .catch((error) => console.log(error.message));
   };
 
+  const handleGoogleLogin = () => {
+    google()
+      .then((res) => {
+        const user = res.user;
+        if (user) {
+          const dataInfo = {
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+          };
+          postDataToTheServer(dataInfo);
+          profile(user, user.displayName, user.photoURL).then(() => {
+            Swal.fire({
+              title: "Successfully Registered",
+              icon: "success",
+            });
+            navigate("/");
+          });
+        }
+      })
+      .catch((error) => console.log(error.message));
+  };
+
+  const onSubmit = (data) => {
+    reset();
+    const { email, password, name, photoURL } = data;
+    const dataInfo = { name, email, photoURL };
+
+    postDataToTheServer(dataInfo);
+
+    CreateUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        profile(user, name, photoURL)
+          .then(() => {
+            Swal.fire({
+              position: "top",
+              icon: "success",
+              title: "Registered Successfully",
+              showConfirmButton: true,
+              timer: 1500,
+            });
+            navigate("/login");
+          })
+          .catch((error) => console.log(error.message));
+      })
+      .catch((error) => console.log(error.message));
+  };
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-800 p-4">
       <div className="w-full max-w-lg bg-gray-600 shadow-2xl rounded-lg p-8">
