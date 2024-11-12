@@ -58,6 +58,7 @@ const AddContest = () => {
         submissionInstructions: data.submissionInstructions,
         tag: selectedTag,
         deadline: deadline,
+        status:'pending',
       };
 
       const formRes = await axiosPublic.post("/contests", formData);

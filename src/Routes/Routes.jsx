@@ -11,6 +11,7 @@ import ManageUsers from "../Pages/Dashboard/ManageUser/ManageUsers";
 import AddContest from "../Pages/Dashboard/AddContest/AddContest";
 import MyContestPage from "../Pages/Dashboard/MyContestPage/MyContestPage";
 import SubmittedContests from "../Pages/Dashboard/SubmittedContests/SubmittedContests";
+import ManageContests from "../Pages/Dashboard/ManageContests/ManageContests";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/submittedContests",
         element: <SubmittedContests></SubmittedContests>,
+      },
+      {
+        path: "/dashboard/manageContests",
+        element: <ManageContests></ManageContests>,
       },
     ],
   },
