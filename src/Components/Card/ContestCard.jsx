@@ -9,9 +9,9 @@ const ContestCard = ({ contest }) => {
         className="w-full h-40 object-cover rounded mb-4"
       />
       <h2 className="text-lg font-bold">{contest.contestName}</h2>
-      <p>Participants:1234</p>
+      <p>Participants:{contest?.participant || 0}</p>
       <p>{contest.contestDescription.slice(0, 50)}...</p>
-      <Link to={`/allContest/${contest._id}`}>
+      <Link to={`/contestDetails/${contest._id}`}>
         <button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">
           Details
         </button>

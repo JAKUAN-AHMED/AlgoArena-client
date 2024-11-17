@@ -65,10 +65,10 @@ const BestContestCreatorsSection = () => {
               </h3>
               <p className="text-gray-700 mb-4">{contest.description}</p>
               <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Participants</span>
                 <p className="text-2xl text-blue-600 font-bold">
                   {contest.participationCount}
                 </p>
-                <span className="text-sm text-gray-500">Participants</span>
               </div>
               <div className="mt-4 text-center">
                 <p className="text-lg font-semibold">{contest.name}</p>

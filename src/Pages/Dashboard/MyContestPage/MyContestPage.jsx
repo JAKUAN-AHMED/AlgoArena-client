@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import useCreatorContest from "../../../Hooks/useCreatorContest";
+import { useNavigate } from "react-router-dom";
+import useRole from "../../../Hooks/useRole";
+import Swal from "sweetalert2";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const MyContestPage = () => {
-  const [contestData] = useCreatorContest();
+  const [contestData,refetch] = useCreatorContest();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedContestId, setSelectedContestId] = useState(null);
+  const [selectedContest, setSelectedContest] = useState(null);
+  const navigate = useNavigate();
+  const [isCreator] = useRole();
+  const axiosPublic=useAxiosPublic();
 
   // Example admin comments, you would likely fetch these from your database
   const adminComments = {
@@ -13,41 +20,67 @@ const MyContestPage = () => {
     contest3_id: "Review required before confirming.",
   };
 
-  // Admin status for deletion
-  const isAdmin = true;
-
   // Handle delete contest
-  const handleDelete = (contestId) => {
-    if (isAdmin) {
-      alert(`Admin has deleted contest with ID: ${contestId}`);
-      // Here you would call the API to delete the contest
-    } else {
-      alert("Only admin can delete accepted contests.");
+  const handleDelete = async(contestId) => {
+    const res=await axiosPublic.delete(`/contests/delete/${contestId}`);
+    if(res.data.deletedCount>0)
+    {
+      Swal.fire({
+        title:'deleted contests ! Reload to see remain contest',
+        icon:"success"
+      })
+      window.location.reload();
     }
+    
   };
 
-  // Handle edit contest
-  const handleEdit = (contestId) => {
-    alert(`Editing contest with ID: ${contestId}`);
-    // Here you would redirect or show an edit form
+  // Handle open edit modal
+  const handleEdit = (contest) => {
+    setSelectedContest(contest);
+    setIsModalOpen(true);
   };
 
   // Handle see submissions
   const handleSeeSubmissions = (contestId) => {
     alert(`Redirecting to submissions for contest with ID: ${contestId}`);
-    // Here you would redirect to submissions page
+    navigate("/dashboard/submittedContests");
   };
 
-  // Open modal to view admin comments
-  const handleCommentClick = (contestId) => {
-    setSelectedContestId(contestId);
-    setIsModalOpen(true);
-  };
-
-  // Close modal
+  // Handle modal close
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedContestId(null);
+    setSelectedContest(null);
+  };
+
+  // Handle input change in modal
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedContest((prevContest) => ({
+      ...prevContest,
+      [name]: value,
+    }));
+  };
+
+  // edit contest
+  const handleSave = () => {
+    fetch(`http://localhost:5000/contests/update/${selectedContest._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(selectedContest),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        refetch();
+        closeModal();
+        if(data.modifiedCount>0)
+        {
+          Swal.fire({
+            title: "Contest updated successfully",
+            icon: "success",
+          });
+        }
+      })
+      .catch((error) => console.error("Error updating contest:", error));
   };
 
   return (
@@ -56,22 +89,23 @@ const MyContestPage = () => {
         My Contests
       </h1>
 
-      {/* Responsive Table with Horizontal Scroll on Small Screens */}
       <div className="p-4 overflow-scroll">
         <table className="table-auto w-full">
           <thead>
             <tr>
-              <th className="border p-2 text-left  text-xs md:text-sm lg:text-base mr-4">
+              <th className="border p-2 text-xs md:text-sm lg:text-base">
                 Contest Name
               </th>
-              <th className="border p-2 text-xs md:text-sm lg:text-base pl-14">
+              <th className="border p-2 text-xs md:text-sm lg:text-base">
                 Description
               </th>
-              <th className="border px-2 py-1 text-xs md:text-sm  text-left lg:text-base">
+              <th className="border p-2 text-xs md:text-sm lg:text-base">
                 Status
               </th>
-              <th className="border p-2 text-sm sm:text-base">Actions</th>
-              <th className="border p-2 text-sm sm:text-base">
+              <th className="border p-2 text-xs md:text-sm lg:text-base">
+                Actions
+              </th>
+              <th className="border p-2 text-xs md:text-sm lg:text-base">
                 Admin Comments
               </th>
             </tr>
@@ -79,13 +113,9 @@ const MyContestPage = () => {
           <tbody>
             {contestData.map((contest) => (
               <tr key={contest._id} className="text-center">
-                <td className="border p-2 flex gap-2 text-sm sm:text-base">
-                  {contest.contestName}
-                </td>
-                <td className="border px-1 py-1">
-                  {contest.contestDescription}
-                </td>
-                <td className="border p-2 text-sm sm:text-base">
+                <td className="border p-2">{contest.contestName}</td>
+                <td className="border p-2">{contest.contestDescription}</td>
+                <td className="border p-2">
                   <span
                     className={`${
                       contest.status === "accepted"
@@ -96,11 +126,11 @@ const MyContestPage = () => {
                     {contest.status}
                   </span>
                 </td>
-                <td className="border p-2 text-sm sm:text-base">
-                  {contest.status === "pending" ? (
+                <td className="border p-2 flex justify-center">
+                  {contest.status === "Pending" ? (
                     <>
                       <button
-                        onClick={() => handleEdit(contest._id)}
+                        onClick={() => handleEdit(contest)}
                         className="bg-blue-500 text-white px-3 py-1 rounded mr-2 text-xs sm:text-sm"
                       >
                         Edit
@@ -121,7 +151,7 @@ const MyContestPage = () => {
                     </button>
                   )}
                 </td>
-                <td className="border p-2 text-sm sm:text-base">
+                <td className="border p-2">
                   <button
                     onClick={() => handleCommentClick(contest._id)}
                     className="bg-yellow-500 text-white px-3 py-1 rounded text-xs sm:text-sm"
@@ -135,24 +165,97 @@ const MyContestPage = () => {
         </table>
       </div>
 
-      {/* Modal for Admin Comments */}
-      {isModalOpen && selectedContestId && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-11/12 sm:w-1/2">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4">
-              Admin Comments
+      {/* Modal for Editing Contest */}
+      {isModalOpen && selectedContest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center overflow-scroll z-50 p-4 sm:p-6 md:p-8">
+          <div className="bg-white p-6 rounded-lg w-full sm:w-10/12 md:w-8/12 lg:w-1/2 mx-auto max-w-3xl">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+              Edit Contest
             </h2>
-            {/* Display admin comment dynamically */}
-            <p className="text-sm sm:text-base">
-              {adminComments[selectedContestId] ||
-                "No comments available for this contest."}
-            </p>
+            <div className="space-y-3">
+              <label>
+                Contest Name:
+                <input
+                  type="text"
+                  name="contestName"
+                  value={selectedContest.contestName}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Contest Image:
+                <input
+                  type="text"
+                  name="contestImage"
+                  value={selectedContest.contestImage}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Description:
+                <input
+                  type="text"
+                  name="contestDescription"
+                  value={selectedContest.contestDescription}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Entry Fee:
+                <input
+                  type="number"
+                  name="entryFee"
+                  value={selectedContest.entryFee}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Prize Money:
+                <input
+                  type="number"
+                  name="prizeMoney"
+                  value={selectedContest.prizeMoney}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Submission Instructions:
+                <textarea
+                  name="submissionInstructions"
+                  value={selectedContest.submissionInstructions}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              <label>
+                Tag:
+                <input
+                  type="text"
+                  name="tag"
+                  value={selectedContest.tag}
+                  onChange={handleInputChange}
+                  className="border p-2 w-full"
+                />
+              </label>
+              
+            </div>
             <div className="mt-4 flex justify-end">
               <button
-                onClick={closeModal}
-                className="bg-gray-500 text-white px-4 py-2 rounded text-xs sm:text-sm"
+                onClick={handleSave}
+                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
               >
-                Close
+                Save
+              </button>
+              <button
+                onClick={closeModal}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
               </button>
             </div>
           </div>

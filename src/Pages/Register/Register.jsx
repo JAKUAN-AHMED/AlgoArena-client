@@ -74,7 +74,7 @@ const Register = () => {
               showConfirmButton: true,
               timer: 1500,
             });
-            navigate("/login");
+            navigate("/");
           })
           .catch((error) => console.log(error.message));
       })

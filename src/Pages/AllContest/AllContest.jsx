@@ -1,22 +1,31 @@
 import { useState } from "react";
 import ContestCard from "../../Components/Card/ContestCard";
 import useContests from "../../Hooks/useContests";
+import useAuth from "../../Hooks/useAuth";
 
 // AllContest Component
 const AllContest = () => {
-  const [contests] = useContests();
+  const [contests,loading1] = useContests();
   const [selectedTab, setSelectedTab] = useState("All");
+  const {loading}=useAuth();
+ const filterContests = () => {
+   if (selectedTab === "All") {
+     return contests.filter((contest) => contest.status === "success");
+   }
+   return contests.filter(
+     (contest) => contest.tag === selectedTab && contest.status === "success"
+   );
+ };
 
-  const filterContests = () => {
-    if (selectedTab === "All") return contests;
-    return contests.filter((contest) => contest.tag === selectedTab);
-  };
 
   const contestTypes = [
     "All",
     ...new Set(contests.map((contest) => contest.tag)),
   ];
-
+  if(loading)
+  {
+    return <p>loading....</p>
+  }
   return (
     <div className="all-contests">
       {/* Dropdown for sm and md, Tabs for lg and above */}

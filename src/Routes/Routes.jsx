@@ -12,6 +12,7 @@ import AddContest from "../Pages/Dashboard/AddContest/AddContest";
 import MyContestPage from "../Pages/Dashboard/MyContestPage/MyContestPage";
 import SubmittedContests from "../Pages/Dashboard/SubmittedContests/SubmittedContests";
 import ManageContests from "../Pages/Dashboard/ManageContests/ManageContests";
+import TaskSubmit from "../Pages/paymentSucess/TaskSubmit";
 
 const router = createBrowserRouter([
   {
@@ -36,11 +37,13 @@ const router = createBrowserRouter([
         element: <AllContest />,
       },
       {
-        path: "/allContest/:id",
-        element: <ContestDetails />,
-        loader: ({ params }) =>
-          fetch(`http://localhost:5000/contests/${params.id}`),
+        path: "/contestDetails/:id",
+        element: <ContestDetails></ContestDetails>,
       },
+      {
+        path:"/payment/success/:tranId",
+        element:<TaskSubmit></TaskSubmit>
+      }
     ],
   },
   {

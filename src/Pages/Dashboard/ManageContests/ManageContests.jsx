@@ -1,27 +1,24 @@
 import React, { useState } from "react";
 import useContests from "../../../Hooks/useContests";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
+import axios from "axios";
 
 
 
 const ManageContests = () => {
   const [contests] = useContests();
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
-  const [selectedContest, setSelectedContest] = useState(null);
   const [comment, setComment] = useState("");
-
+  const axiosPublic=useAxiosPublic();
   const handleDelete = (id) => {
-    // setContests(contests.filter((contest) => contest.id !== id));
-    // Implement delete from database logic here
+    const res=axiosPublic.delete(`/contests/delete/${id}`)
   };
 
-  const handleConfirm = (id) => {
-    // setContests(
-    //   contests.map((contest) =>
-    //     contest.id === id ? { ...contest, status: "Confirmed" } : contest
-    //   )
-    // );
-    // Implement confirm in database logic here
-  };
+ const handleConfirmed = (id) => {
+  const response=axiosPublic.patch(`/contests/confirm/${id}`);
+  console.log(response);
+  
+ };
 
   const handleComment = (contest) => {
     setSelectedContest(contest);
@@ -57,22 +54,38 @@ const ManageContests = () => {
                 key={contest._id}
                 className="border-b border-gray-200 hover:bg-gray-100"
               >
-                <td className="py-2 px-2 md:py-3 md:px-6">{contest.contestName}</td>
-                <td className="py-2 px-2 md:py-3 md:px-6">{contest.deadline}</td>
+                <td className="py-2 px-2 md:py-3 md:px-6">
+                  {contest.contestName}
+                </td>
+                <td className="py-2 px-2 md:py-3 md:px-6">
+                  {contest.deadline}
+                </td>
                 <td className="py-2 px-2 md:py-3 md:px-6">{contest.status}</td>
                 <td className="py-2 px-2 md:py-3 md:px-6 space-y-1 sm:space-y-0 sm:space-x-2 md:space-x-3 flex flex-col sm:flex-row">
                   <button
                     className="bg-red-500 hover:bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded"
-                    onClick={() => handleDelete(contest.id)}
+                    onClick={() => handleDelete(contest._id)}
                   >
                     Delete
                   </button>
-                  <button
-                    className="bg-green-500 hover:bg-green-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded"
-                    onClick={() => handleConfirm(contest.id)}
-                  >
-                    Confirm
-                  </button>
+                  {contest.status === "success" ? (
+                    <>
+                      <button
+                        className="bg-green-500 hover:bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded"
+                      >
+                        Confirmed
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="bg-green-500 hover:bg-green-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded md:mr-2"
+                        onClick={() => handleConfirmed(contest._id)}
+                      >
+                        Confirm
+                      </button>
+                    </>
+                  )}
                   <button
                     className="bg-blue-500 hover:bg-blue-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded"
                     onClick={() => handleComment(contest)}

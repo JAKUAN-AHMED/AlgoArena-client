@@ -1,14 +1,34 @@
-import AwesomeSlider from 'react-awesome-slider';
+import React, { useState } from "react";
+import AwesomeSlider from "react-awesome-slider";
 import withAutoplay from "react-awesome-slider/dist/autoplay";
-import 'react-awesome-slider/dist/styles.css';
-import img1 from '../../../assets/s1.jpg';
-import img2 from '../../../assets/s2.jpg';
-import img3 from '../../../assets/s3.jpg';
-import img4 from '../../../assets/s4.jpg';
-import img5 from '../../../assets/s5.jpg';
-const images=[img1,img2,img3,img4,img5];
-const Banner = () => {
+import "react-awesome-slider/dist/styles.css";
+import img1 from "../../../assets/s1.jpg";
+import img2 from "../../../assets/s2.jpg";
+import img3 from "../../../assets/s3.jpg";
+import img4 from "../../../assets/s4.jpg";
+import img5 from "../../../assets/s5.jpg";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
+const images = [img1, img2, img3, img4, img5];
+
+const Banner = ({ setSearchResults }) => {
+  const [searchQuery, setSearchQuery] = useState("");
   const AutoplaySlider = withAutoplay(AwesomeSlider);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/search?query=${searchQuery}`
+      );
+      setSearchResults(response.data); // Pass the results to the parent component
+    } catch (err) {
+      console.error("Error fetching contests:", err);
+    }
+  };
+
   return (
     <div className="relative">
       <AutoplaySlider
@@ -18,15 +38,18 @@ const Banner = () => {
         className="h-full overflow-hidden"
       >
         {images.map((img, idx) => (
-          <div key={idx} data-src={img} className="bg-cover bg-fixed bg-center h-full" />
+          <div
+            key={idx}
+            data-src={img}
+            className="bg-cover bg-fixed bg-center h-full"
+          />
         ))}
       </AutoplaySlider>
 
-      {/* banner content */}
-
+      {/* Banner Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white bg-black bg-opacity-50 font-jost">
-        {/* for text only */}
-        <div className="relative  z-20 text-center max-w-4xl px-4">
+        {/* Text */}
+        <div className="relative z-20 text-center max-w-4xl px-4">
           <h2 className="text-lg md:text-3xl lg:text-5xl text-blue-200 font-bold md:p-4 font-jost">
             Master Programming with Mates
           </h2>
@@ -35,16 +58,26 @@ const Banner = () => {
           </p>
         </div>
 
-        {/*search bar */}
+        {/* Search Bar */}
         <div className="flex z-20 items-center justify-center max-w-lg md:w-full">
-          <input
-            type="text"
-            className="w-full px-4 py-2 rounded-l-md text-gray-800 "
-            placeholder="Search for contests ...."
-          />
-          <button className="bg-purple-600 hover:bg-purple-700 px-4 py-2 text-white font-semibold">
-            Search
-          </button>
+          <form
+            onSubmit={handleSearch}
+            className="flex w-full items-center space-x-2"
+          >
+            <input
+              type="text"
+              className="w-full px-4 py-2 rounded-l-md text-gray-800"
+              placeholder="Search for contests...."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="bg-purple-600 hover:bg-purple-700 px-4 py-2 text-white font-semibold rounded-r-md"
+            >
+              Search
+            </button>
+          </form>
         </div>
       </div>
     </div>

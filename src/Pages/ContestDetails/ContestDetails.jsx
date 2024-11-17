@@ -3,16 +3,16 @@ import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import useContests from "../../Hooks/useContests";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const ContestDetails = () => {
   const { id } = useParams();
-  const [contests] = useContests();
+  const [contests,refetch,loading1] = useContests();
   const contest = contests.find((c) => c._id === id);
 
   const [timeRemaining, setTimeRemaining] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!contest || !contest.deadline) return;
@@ -47,68 +47,35 @@ const ContestDetails = () => {
     setShowModal(true);
   };
 
-  const processPayment = () => {
-    // Simulate a payment processing delay and response
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(true), 2000);
-    });
-  };
+ 
 
-  const handlePayment = async () => {
-    setIsSubmitting(true);
-    const paymentSuccess = await processPayment();
-
-    if (paymentSuccess) {
-      Swal.fire(
-        "Payment Successful!",
-        "You have successfully registered for the contest!",
-        "success"
-      );
-      setShowModal(false);
-
+  const handlePayment = () => {
+      const info=
+      {
+           contestId: contest._id,
+            name: formData.name,
+            email: formData.email,
+            email1:contest.email,
+            entryFee:contest.entryFee,
+      }
       // Send registration data to the backend
-      try {
-        const response = await fetch("http://localhost:5000/initiate-payment", {
+      fetch("http://localhost:5000/payment-history", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            contestId: contest._id,
-            name: formData.name,
-            email: formData.email,
-            email1:contest.email,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          Swal.fire(
-            "Registered!",
-            "Your registration was successful.",
-            "success"
-          );
-        } else {
-          Swal.fire("Error", data.message || "Registration failed.", "error");
-        }
-      } catch (error) {
-        Swal.fire(
-          "Error",
-          "Could not complete registration. Try again.",
-          "error"
-        );
-      }
-    } else {
-      Swal.fire("Payment Failed", "Please try again.", "error");
-    }
-
-    setIsSubmitting(false);
+          body: JSON.stringify(info),
+        }).then(res=>res.json()).then(result=>{
+          // console.log('url',result);
+          window.location.replace(result.url)
+        })
+   
   };
 
-  if (!contest) {
-    return <p>Contest not found</p>;
-  }
+ 
+ if(loading1){
+  return <p>loading ....</p>;
+ }
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -119,10 +86,19 @@ const ContestDetails = () => {
       />
       <h1 className="text-2xl font-bold mb-2">{contest.contestName}</h1>
       <p className="text-gray-600 mb-2">
-        Participants: {contest.participants || "1230"}
+        Participants: {contest?.participant || "0"}
       </p>
-      <p className="text-gray-700 mb-4">{contest.contestDescription}</p>
+      <p className="text-gray-700 mb-4">
+        <span className="font-bold">Description</span> :
+        {contest.contestDescription}
+      </p>
       <p className="font-semibold mb-4">Prize Money: {contest.prizeMoney}</p>
+      <p className="font-semibold mb-4">Entry Fee : {contest.entryFee}</p>
+      <p className="mb-4">
+        {" "}
+        <span className="font-bold">Instruction</span> :{" "}
+        {contest.submissionInstructions}
+      </p>
       <p className="font-semibold mb-4">
         Deadline: <span className="text-blue-500">{timeRemaining}</span>
       </p>
@@ -172,13 +148,10 @@ const ContestDetails = () => {
               <div className="mt-4">
                 <button
                   type="button"
-                  className={`bg-green-500 text-white p-2 rounded-md w-full ${
-                    isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className="bg-green-500 text-white p-2 rounded-md w-full "
                   onClick={handlePayment}
-                  disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Processing..." : "Pay & Register"}
+                  Pay & Register
                 </button>
               </div>
             </form>

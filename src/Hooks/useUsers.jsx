@@ -3,16 +3,15 @@ import useAxiosPublic from "./useAxiosPublic";
 
 const useUsers = () => {
     const axiosPublic=useAxiosPublic();
-    const {refetch,data:users=[]}=useQuery({
+    const {refetch,data:users=[],isLoading:loading2}=useQuery({
         queryKey:['users'],
         queryFn:async()=>{
             const res=await axiosPublic.get('/users');
-            console.log('users data = ',res.data);
             return res.data;
         }
     });
-
-   return [users,refetch];
+    
+   return [users,refetch,loading2];
 };
 
 export default useUsers;

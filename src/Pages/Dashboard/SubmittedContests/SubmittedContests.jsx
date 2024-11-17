@@ -1,139 +1,110 @@
-import React, { useState } from "react";
-
-// Sample data for contests and submissions
-const contestsData = [
-  {
-    _id: 1,
-    contestTitle: "Competitive Programming Contest",
-    prize: 300,
-    submissions: [
-      {
-        id: 1,
-        participantName: "John Doe",
-        email: "john@example.com",
-        taskLink: "https://drive.google.com/file/d/1abc123",
-        isWinner: false,
-      },
-      {
-        id: 2,
-        participantName: "Jane Smith",
-        email: "jane@example.com",
-        taskLink: "https://drive.google.com/file/d/2xyz456",
-        isWinner: false,
-      },
-    ],
-  },
-  {
-    _id: 2,
-    contestTitle: "Web Development Contest",
-    prize: 200,
-    submissions: [
-      {
-        id: 1,
-        participantName: "Alice Johnson",
-        email: "alice@example.com",
-        taskLink: "https://drive.google.com/file/d/3ghi789",
-        isWinner: false,
-      },
-    ],
-  },
-];
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import useAuth from "../../../Hooks/useAuth";
 
 const SubmittedContests = () => {
+  const [contests, setContests] = useState([]);
   const [selectedContest, setSelectedContest] = useState(null);
-  const [contests, setContests] = useState(contestsData);
-
-  // Function to handle winner declaration
-  const handleDeclareWinner = (contestId, submissionId) => {
-    setContests((prevContests) =>
-      prevContests.map((contest) =>
-        contest._id === contestId
-          ? {
-              ...contest,
-              submissions: contest.submissions.map((submission) =>
-                submission.id === submissionId
-                  ? { ...submission, isWinner: true }
-                  : { ...submission, isWinner: false }
-              ),
-            }
-          : contest
+  const [winners, setWinners] = useState({}); // Tracks declared winners by contestId
+  const {User}=useAuth();
+  // Fetch data when the component mounts
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:5000/payment-history/emailData/email?email=${User?.email}`
       )
-    );
+      .then((response) => {
+        setContests(response.data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  // Handle declaring a winner
+  const declareWinner = (contestId, submissionId) => {
+    setWinners((prev) => ({
+      ...prev,
+      [contestId]: submissionId,
+    }));
   };
 
   return (
-    <div className="contest-submissions-container p-4">
-      <h1 className="text-center text-xl font-bold mb-5">
-        My Contests & Submissions
-      </h1>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">Creator's Contests</h1>
 
-      {/* Contest List */}
-      <div className="contest-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        {contests.map((contest) => (
-          <div
-            key={contest._id}
-            className="contest-card border p-4 rounded shadow-lg hover:shadow-xl transition-all"
-            onClick={() => setSelectedContest(contest)}
-          >
-            <h3 className="text-lg font-semibold">{contest.contestTitle}</h3>
-            <p className="text-sm text-gray-600">Prize: ${contest.prize}</p>
-          </div>
-        ))}
+      {/* Display All Contests */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-semibold mb-2">Your Contests</h2>
+        <div className="space-y-4">
+          {contests.map((contest) => (
+            <div
+              key={contest.contestId}
+              className="p-4 border rounded shadow cursor-pointer hover:bg-gray-100"
+              onClick={() => setSelectedContest(contest.contestId)}
+            >
+              <h3 className="text-xl font-medium">{contest.name}</h3>
+              <p>
+                <strong>Prize:</strong> ${contest.entryFee * 10}{" "}
+                {/* Example Prize Logic */}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Show Submissions of the selected contest */}
+      {/* Display Selected Contest Details */}
       {selectedContest && (
-        <div className="submissions-list">
-          <h2 className="text-center text-lg font-semibold mb-4">
-            Submissions for "{selectedContest.contestTitle}"
+        <div>
+          <h2 className="text-2xl font-semibold mb-2">
+            Submissions for Contest
           </h2>
-
-          <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr>
-                  <th className="border p-2">Participant Name</th>
-                  <th className="border p-2">Email</th>
-                  <th className="border p-2">Task Link</th>
-                  <th className="border p-2">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedContest.submissions.map((submission) => (
-                  <tr key={submission.id}>
-                    <td className="border p-2">{submission.participantName}</td>
-                    <td className="border p-2">{submission.email}</td>
-                    <td className="border p-2">
+          <div className="space-y-4">
+            {contests
+              .filter((contest) => contest.contestId === selectedContest)
+              .map((submission) => (
+                <div
+                  key={submission._id}
+                  className="p-4 border rounded shadow flex items-center justify-between"
+                >
+                  <div>
+                    <p>
+                      <strong>Participant Name:</strong> {submission.name}
+                    </p>
+                    <p>
+                      <strong>Email:</strong> {submission.email}
+                    </p>
+                    <p>
+                      <strong>Task:</strong>{" "}
                       <a
-                        href={submission.taskLink}
+                        href={submission.pdfLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-blue-500"
+                        className="text-blue-500 underline"
                       >
                         View Submission
                       </a>
-                    </td>
-                    <td className="border p-2">
-                      {!submission.isWinner ? (
-                        <button
-                          onClick={() =>
-                            handleDeclareWinner(
-                              selectedContest._id,
-                              submission.id
-                            )
-                          }
-                          className="bg-blue-500 text-white px-3 py-1 rounded"
-                        >
-                          Declare Winner
-                        </button>
-                      ) : (
-                        <span className="bg-green-200 p-1 rounded">Winner</span>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </p>
+                  </div>
+                  <div>
+                    {winners[selectedContest] === submission._id ? (
+                      <button
+                        className="bg-green-600 text-white px-4 py-2 rounded"
+                        disabled
+                      >
+                        Winner
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        onClick={() =>
+                          declareWinner(selectedContest, submission._id)
+                        }
+                      >
+                        Declare Win
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       )}

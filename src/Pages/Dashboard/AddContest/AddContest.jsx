@@ -6,6 +6,8 @@ import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 import axios from "axios";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import useAuth from "../../../Hooks/useAuth";
+import useUsers from "../../../Hooks/useUsers";
 
 const AddContest = () => {
   const {
@@ -17,6 +19,10 @@ const AddContest = () => {
   } = useForm();
 
   const axiosPublic = useAxiosPublic();
+  const {User,loading}=useAuth();
+  // const {email}=User;
+  const [users,loading2]=useUsers();
+  const finduser=users.find(us=>us?.email===User?.email);
 
   const [selectedTag, setSelectedTag] = useState("Coding Contest");
   const [deadline, setDeadline] = useState(null);
@@ -58,7 +64,8 @@ const AddContest = () => {
         submissionInstructions: data.submissionInstructions,
         tag: selectedTag,
         deadline: deadline,
-        status:'pending',
+        status:'Pending',
+        email:User?.email,
       };
 
       const formRes = await axiosPublic.post("/contests", formData);
@@ -70,7 +77,6 @@ const AddContest = () => {
       }
     }
   };
-
   return (
     <div className="container mx-auto p-8 bg-gray-100 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
@@ -218,12 +224,24 @@ const AddContest = () => {
         </div>
 
         <div className="flex justify-center mt-6">
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Add Contest
-          </button>
+          {finduser?.blocked ? (
+            <>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-blue-700"
+              >
+                U cant't add Contest u blocked bY Admin
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Add Contest
+              </button>
+            </>
+          )}
         </div>
       </form>
     </div>
