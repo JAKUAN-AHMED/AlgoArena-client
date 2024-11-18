@@ -14,7 +14,7 @@ Welcome to **AlgoArena** — the ultimate platform to create, participate in, an
 ## 📸 Project Preview  
 
 ### 🏠 Home Page  
-![Home Page](https://i.ibb.co.com/J3tTyT3/localhost-5173-1.png)  
+![Home Page](https://i.ibb.co.com/b13NWD3/localhost-5173.jpg)  
 
 ### 📋 All Contests Page  
 ![All Contests Page](https://i.ibb.co.com/7SGkZBy/allcontest.png)  
