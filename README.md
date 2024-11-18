@@ -1,26 +1,26 @@
-# 🎉 ContestHub  
+# 🎉 AlgoArena
 
 ![ContestHub Banner](https://via.placeholder.com/1200x400?text=ContestHub)  
 
-Welcome to **ContestHub** — the ultimate platform to create, participate in, and manage contests! This application is designed to streamline the process of contest organization and participation while providing an engaging user experience.  
+Welcome to **AlgoArena** — the ultimate platform to create, participate in, and manage contests! This application is designed to streamline the process of contest organization and participation while providing an engaging user experience.  
 
 ---
 
 ## 🌐 Live Website  
-[**Visit ContestHub Live**](https://your-website-url.com)  
+[**Visit ContestHub Live**](https://algoarena-930d5.web.app/)  
 
 ---
 
 ## 📸 Project Preview  
 
 ### 🏠 Home Page  
-![Home Page](https://via.placeholder.com/1200x800?text=Home+Page+Screenshot)  
+![Home Page](https://i.ibb.co.com/J3tTyT3/localhost-5173-1.png)  
 
 ### 📋 All Contests Page  
-![All Contests Page](https://via.placeholder.com/1200x800?text=All+Contests+Screenshot)  
+![All Contests Page](https://i.ibb.co.com/7SGkZBy/allcontest.png)  
 
 ### 🛠️ Admin Dashboard  
-![Admin Dashboard](https://via.placeholder.com/1200x800?text=Admin+Dashboard+Screenshot)  
+![Admin Dashboard](https://i.ibb.co.com/zGVBxbY/admin.png)  
 
 ---
 
@@ -69,7 +69,7 @@ Welcome to **ContestHub** — the ultimate platform to create, participate in, a
 | **MongoDB**     | Database                 |  
 | **Firebase**    | Authentication service   |  
 | **JWT**         | Token-based authentication |  
-| **Vercel**      | Server-side deployment   |  
+| **Render**      | Server-side deployment   |  
 | **Firebase Hosting** | Client-side deployment |  
 
 ---
@@ -98,4 +98,4 @@ bash
 Copy code
 npm run dev  
 Open the app in your browser:
-http://localhost:3000
+http://localhost:5173
