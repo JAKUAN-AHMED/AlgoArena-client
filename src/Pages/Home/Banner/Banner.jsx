@@ -21,7 +21,7 @@ const Banner = ({ setSearchResults }) => {
 
     try {
       const response = await axiosPublic.get(
-        `https://algoarena-server-6679.onrender.com/search?query=${searchQuery}`
+        `/search?query=${searchQuery}`
       );
       setSearchResults(response.data); // Pass the results to the parent component
     } catch (err) {

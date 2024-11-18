@@ -50,6 +50,7 @@ const AddContest = () => {
       headers: {
         "content-type": "multipart/form-data",
       },
+      withCredentials:true
     });
 
     if (res.data.success) {

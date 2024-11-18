@@ -64,10 +64,10 @@ const MyContestPage = () => {
   // edit contest
   const handleSave = () => {
     axiosPublic.put(`/contests/update/${selectedContest._id}`,selectedContest)
-      .then((data) => {
+      .then((res) => {
         refetch();
         closeModal();
-        if(data.modifiedCount>0)
+        if(res.data.modifiedCount>0)
         {
           Swal.fire({
             title: "Contest updated successfully",
