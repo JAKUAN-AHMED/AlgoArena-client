@@ -63,12 +63,7 @@ const MyContestPage = () => {
 
   // edit contest
   const handleSave = () => {
-    fetch(`http://localhost:5000/contests/update/${selectedContest._id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(selectedContest),
-    })
-      .then((response) => response.json())
+    axiosPublic.put(`/contests/update/${selectedContest._id}`,selectedContest)
       .then((data) => {
         refetch();
         closeModal();

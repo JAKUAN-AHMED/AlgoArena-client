@@ -3,13 +3,14 @@ import { useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import useContests from "../../Hooks/useContests";
 import Swal from "sweetalert2";
-import axios from "axios";
+import useAxiosPublic from "../../Hooks/useAxiosPublic";
+
 
 const ContestDetails = () => {
   const { id } = useParams();
   const [contests,refetch,loading1] = useContests();
   const contest = contests.find((c) => c._id === id);
-
+  const axiosPublic=useAxiosPublic();
   const [timeRemaining, setTimeRemaining] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "" });
@@ -59,13 +60,7 @@ const ContestDetails = () => {
             entryFee:contest.entryFee,
       }
       // Send registration data to the backend
-      fetch("http://localhost:5000/payment-history", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(info),
-        }).then(res=>res.json()).then(result=>{
+      axiosPublic.post("/payment-history",info).then(result=>{
           // console.log('url',result);
           window.location.replace(result.url)
         })

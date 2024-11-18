@@ -7,21 +7,21 @@ import img2 from "../../../assets/s2.jpg";
 import img3 from "../../../assets/s3.jpg";
 import img4 from "../../../assets/s4.jpg";
 import img5 from "../../../assets/s5.jpg";
-import axios from "axios";
 import { Link } from "react-router-dom";
+import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
 const images = [img1, img2, img3, img4, img5];
 
 const Banner = ({ setSearchResults }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const AutoplaySlider = withAutoplay(AwesomeSlider);
-
+  const axiosPublic=useAxiosPublic();
   const handleSearch = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.get(
-        `http://localhost:5000/search?query=${searchQuery}`
+      const response = await axiosPublic.get(
+        `https://algoarena-server-6679.onrender.com/search?query=${searchQuery}`
       );
       setSearchResults(response.data); // Pass the results to the parent component
     } catch (err) {

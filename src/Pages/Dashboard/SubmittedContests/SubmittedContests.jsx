@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import useAuth from "../../../Hooks/useAuth";
 import useCreatorContest from "../../../Hooks/useCreatorContest";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
@@ -15,9 +14,9 @@ const SubmittedContests = () => {
   const [Winner,setWinner]=useWinner();
   // Fetch data when the component mounts
   useEffect(() => {
-    axios
+    axiosPublic
       .get(
-        `http://localhost:5000/payment-history/emailData/email?email=${User?.email}`
+        `/payment-history/emailData/email?email=${User?.email}`
       )
       .then((response) => {
         setContests(response.data);
