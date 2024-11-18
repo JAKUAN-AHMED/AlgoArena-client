@@ -1,6 +1,6 @@
 # 🎉 AlgoArena
 
-![ContestHub Banner](https://via.placeholder.com/1200x400?text=ContestHub)  
+![AlgoArena Banner](https://i.ibb.co.com/RyN13dw/banner.png)  
 
 Welcome to **AlgoArena** — the ultimate platform to create, participate in, and manage contests! This application is designed to streamline the process of contest organization and participation while providing an engaging user experience.  
 
