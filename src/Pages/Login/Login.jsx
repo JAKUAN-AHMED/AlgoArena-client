@@ -1,7 +1,7 @@
 // Login.jsx
 
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { GrGoogle } from "react-icons/gr";
@@ -15,15 +15,16 @@ const Login = () => {
     reset,
   } = useForm();
   const navigate=useNavigate();
+  const location=useLocation();
   const handleGoogleLogin = () => {
     google()
       .then((res) => {
+        navigate(location?.state ? location.state : "/");
         const user = res.user;
         if (user && !user.photoURL) {
           const name = user.displayName;
           const photo = user.photoURL;
           profile(user, name, photo).then(() => {
-            navigate("/");
             Swal.fire({
               title: "successfully Login",
               icon: "success",
@@ -48,7 +49,7 @@ const Login = () => {
          showConfirmButton: true,
          timer: 1500,
        });
-       navigate('/');
+      navigate(location?.state ? location.state : "/");
     })
     .catch(error=>console.log(error.message));
   };

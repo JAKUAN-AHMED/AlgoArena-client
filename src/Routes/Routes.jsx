@@ -14,6 +14,7 @@ import SubmittedContests from "../Pages/Dashboard/SubmittedContests/SubmittedCon
 import ManageContests from "../Pages/Dashboard/ManageContests/ManageContests";
 import TaskSubmit from "../Pages/paymentSucess/TaskSubmit";
 import UserInfo from "../Pages/UserInfo/UserInfo";
+import PrivateRoutes from "./PrivateRoutes";
 
 const router = createBrowserRouter([
   {
@@ -39,17 +40,29 @@ const router = createBrowserRouter([
       },
       {
         path: "/contestDetails/:id",
-        element: <ContestDetails></ContestDetails>,
+        element: (
+          <PrivateRoutes>
+            <ContestDetails></ContestDetails>
+          </PrivateRoutes>
+        ),
       },
       {
-        path:"/payment/success/:tranId",
-        element:<TaskSubmit></TaskSubmit>
-      }
+        path: "/payment/success/:tranId",
+        element: (
+          <PrivateRoutes>
+            <TaskSubmit></TaskSubmit>
+          </PrivateRoutes>
+        ),
+      },
     ],
   },
   {
     path: "/dashboard",
-    element: <Dashboard></Dashboard>,
+    element: (
+      <PrivateRoutes>
+        <Dashboard></Dashboard>
+      </PrivateRoutes>
+    ),
     children: [
       {
         path: "/dashboard/manageUser",
@@ -72,9 +85,9 @@ const router = createBrowserRouter([
         element: <ManageContests></ManageContests>,
       },
       {
-        path:"/dashboard/participated",
-        element:<UserInfo></UserInfo>
-      }
+        path: "/dashboard/participated",
+        element: <UserInfo></UserInfo>,
+      },
     ],
   },
 ]);
