@@ -61,7 +61,6 @@ const ContestDetails = () => {
       }
       // Send registration data to the backend
       axiosPublic.post("/payment-history",info).then(res=>{
-          console.log(res.data.url);
           window.location.replace(res.data.url)
         })
    

@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 const UserInfo = () => {
   const [userContests, loading3] = useUserContest(); 
-  console.log("userInfo",userContests.length);
   // Participated contests
   const [contests] = useContests(); // All contests
 

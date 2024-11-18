@@ -9,7 +9,6 @@ const AdvertisementSection = ({
   flowerImage = img2,
 }) => {
   const [Winner]=useWinner();
-  console.log(Winner);
   return (
     <div
       className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-12 px-6 mt-12 mb-12"

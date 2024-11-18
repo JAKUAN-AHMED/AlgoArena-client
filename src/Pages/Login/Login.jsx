@@ -34,7 +34,6 @@ const Login = () => {
       .catch((error) => console.log(error.message));
   };
   const onSubmit = (data) => {
-    console.log("data from login page", data);
     reset();
     //login
     const email=data.email;

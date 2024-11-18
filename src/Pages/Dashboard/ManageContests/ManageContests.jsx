@@ -2,23 +2,18 @@ import React, { useState } from "react";
 import useContests from "../../../Hooks/useContests";
 import useAxiosPublic from "../../../Hooks/useAxiosPublic";
 
-
-
-
 const ManageContests = () => {
   const [contests] = useContests();
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const [comment, setComment] = useState("");
-  const axiosPublic=useAxiosPublic();
+  const axiosPublic = useAxiosPublic();
   const handleDelete = (id) => {
-    const res=axiosPublic.delete(`/contests/delete/${id}`)
+    const res = axiosPublic.delete(`/contests/delete/${id}`);
   };
 
- const handleConfirmed = (id) => {
-  const response=axiosPublic.patch(`/contests/confirm/${id}`);
-  console.log(response);
-  
- };
+  const handleConfirmed = (id) => {
+    const response = axiosPublic.patch(`/contests/confirm/${id}`);
+  };
 
   const handleComment = (contest) => {
     setSelectedContest(contest);
@@ -26,7 +21,6 @@ const ManageContests = () => {
   };
 
   const handleCommentSubmit = () => {
-    console.log("Comment submitted:", comment);
     setCommentModalOpen(false);
     setComment("");
     // Send comment to the database and link to the creator dashboard
@@ -70,9 +64,7 @@ const ManageContests = () => {
                   </button>
                   {contest.status === "success" ? (
                     <>
-                      <button
-                        className="bg-green-500 hover:bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded"
-                      >
+                      <button className="bg-green-500 hover:bg-red-600 text-white text-xs md:text-sm px-3 md:px-4 py-1 rounded">
                         Confirmed
                       </button>
                     </>

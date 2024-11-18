@@ -9,13 +9,11 @@ const TaskSubmit = () => {
   const [pdfLink, setPdfLink] = useState("");
   const { tranId } = useParams(); 
   const axiosPublic = useAxiosPublic();
-  console.log("transaction",tranId);
   const handleInputChange = (e) => {
     setPdfLink(e.target.value);
   };
 
   const handleSubmit = () => {
-    console.log("PDF Link Submitted:", pdfLink);
     axiosPublic
       .patch(`/payment-history/${tranId}`, { pdfLink: pdfLink })
       .then((res) => {

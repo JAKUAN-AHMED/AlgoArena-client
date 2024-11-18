@@ -7,7 +7,7 @@ const useContests = () => {
         queryKey:['contests'],
         queryFn:async()=>{
             const res=await axiosPublic.get("/contests");
-            // console.log('all data of contest',res.data);
+  
             return res.data;
         }
     })
