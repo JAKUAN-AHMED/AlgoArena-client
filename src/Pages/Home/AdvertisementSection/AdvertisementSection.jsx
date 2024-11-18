@@ -1,3 +1,4 @@
+import useWinner from "../../../Hooks/useWinner.jsx";
 import img1 from "../../../assets/CoverForPh.jpg";
 import img2 from "../../../assets/c.jpg";
 const AdvertisementSection = ({
@@ -7,6 +8,8 @@ const AdvertisementSection = ({
   backgroundImage = img2,
   flowerImage = img2,
 }) => {
+  const [Winner]=useWinner();
+  console.log(Winner);
   return (
     <div
       className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-12 px-6 mt-12 mb-12"
@@ -56,11 +59,11 @@ const AdvertisementSection = ({
         <div className="flex-1 text-center bg-white text-black p-6 rounded-lg shadow-lg">
           <img
             src={contestWinner.image}
-            alt={`${contestWinner.name} - Contest Winner`}
+            alt={`${Winner} - Contest Winner`}
             className="w-32 h-32 mx-auto rounded-full mb-4"
           />
           <h3 className="text-xl font-bold mb-2">
-            Congratulations {contestWinner.name}!
+            Congratulations {Winner}!
           </h3>
           <p className="text-gray-700">
             Our latest contest winner. Will you be next?

@@ -13,6 +13,7 @@ import MyContestPage from "../Pages/Dashboard/MyContestPage/MyContestPage";
 import SubmittedContests from "../Pages/Dashboard/SubmittedContests/SubmittedContests";
 import ManageContests from "../Pages/Dashboard/ManageContests/ManageContests";
 import TaskSubmit from "../Pages/paymentSucess/TaskSubmit";
+import UserInfo from "../Pages/UserInfo/UserInfo";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +71,10 @@ const router = createBrowserRouter([
         path: "/dashboard/manageContests",
         element: <ManageContests></ManageContests>,
       },
+      {
+        path:"/dashboard/participated",
+        element:<UserInfo></UserInfo>
+      }
     ],
   },
 ]);

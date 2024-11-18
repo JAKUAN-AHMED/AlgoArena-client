@@ -89,7 +89,7 @@ const Dashboard = () => {
                   </li>
                   <li className="border-2 border-yellow-300 rounded-xl lg:shadow-xl mt-2 text-start pl-2 text-[10px] lg:text-xl">
                     <NavLink
-                      to={"/dashboard/winnersPage"}
+                      to={"/"}
                       className="flex items-center gap-1"
                     >
                       <span>
