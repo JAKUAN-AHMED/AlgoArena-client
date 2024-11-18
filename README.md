@@ -7,7 +7,7 @@ Welcome to **AlgoArena** — the ultimate platform to create, participate in, an
 ---
 
 ## 🌐 Live Website  
-[**Visit ContestHub Live**](https://algoarena-930d5.web.app/)  
+[**Visit AlgoArena Live**](https://algoarena-930d5.web.app/)  
 
 ---
 
